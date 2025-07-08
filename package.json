@@ -66,6 +66,7 @@
     "@builder.io/sdk": "6.1.1",
     "@c15t/nextjs": "^1.4.2",
     "@clerk/nextjs": "^6.23.3",
+    "@electric-sql/pglite": "^0.3.4",
     "@formkit/auto-animate": "^0.8.2",
     "@fortawesome/fontawesome-svg-core": "6.7.2",
     "@fortawesome/free-solid-svg-icons": "6.7.2",
@@ -260,8 +261,8 @@
     "vitest": "^3.2.4",
     "vitest-browser-react": "^0.3.0",
     "webdriverio": "9.15.0",
-    "worker-loader": "^3.0.8" 
-   },
+    "worker-loader": "^3.0.8"
+  },
   "shipkit": {
     "bones": "0.2.0"
   },

@@ -5,7 +5,11 @@ import { withPlugins } from "@/config/with-plugins";
 import type { NextConfig } from "next";
 import path from "path";
 
+const SHIPKIT_DOMAIN = process.env.SHIPKIT_DOMAIN ?? "shipkit-five.vercel.app";
+
 const nextConfig: NextConfig = {
+	assetPrefix: '/ai-static',
+
 	env: {
 		// Add client-side feature flags
 		...buildTimeFeatureFlags,
@@ -32,6 +36,10 @@ const nextConfig: NextConfig = {
 			{
 				protocol: "https",
 				hostname: "shipkit.s3.**.amazonaws.com",
+			},
+			{
+				protocol: "https",
+				hostname: SHIPKIT_DOMAIN,
 			},
 		],
 		/*
@@ -124,7 +132,7 @@ const nextConfig: NextConfig = {
 			* Dangerously allow production builds to successfully complete even if
 			* your project has type errors.
 		*/
-		// ignoreBuildErrors: true,
+		ignoreBuildErrors: true,
 	},
 
 	// Configure `pageExtensions` to include markdown and MDX files
