@@ -1,15 +1,12 @@
 import { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
-import { FlatCompat } from "@eslint/eslintrc";
+import nextCoreWebVitals from "eslint-config-next/core-web-vitals";
+import nextTypescript from "eslint-config-next/typescript";
 import ts from "@typescript-eslint/eslint-plugin";
 import tsParser from "@typescript-eslint/parser";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-
-const compat = new FlatCompat({
-	baseDirectory: __dirname,
-});
 
 const eslintConfig = [
 	// Base config for all files
@@ -37,13 +34,32 @@ const eslintConfig = [
 		],
 	},
 
-	// Extend configurations
-	...compat.extends(
-		"plugin:@typescript-eslint/recommended-type-checked",
-		"plugin:@typescript-eslint/stylistic-type-checked",
-		"next/core-web-vitals",
-		"next/typescript"
-	),
+	/*
+	 * eslint-config-next 16 ships flat configs as its own exports, so the
+	 * eslintrc FlatCompat bridge this file used on 15.x is gone. Extending the
+	 * legacy `next/core-web-vitals` name through FlatCompat against the 16
+	 * package throws "Converting circular structure to JSON" out of the
+	 * eslintrc config validator (LAC-6482).
+	 */
+	...nextCoreWebVitals,
+	...nextTypescript,
+
+	/*
+	 * The same two rule sets the
+	 * `plugin:@typescript-eslint/{recommended,stylistic}-type-checked`
+	 * extends provided, spread as rules only. Those eslintrc configs also
+	 * pull in typescript-eslint's `base`, which registers the
+	 * `@typescript-eslint` plugin a second time, and flat config rejects that
+	 * ("Cannot redefine plugin") now that eslint-config-next 16 registers it
+	 * first.
+	 */
+	{
+		files: ["**/*.{ts,tsx}"],
+		rules: {
+			...ts.configs["recommended-type-checked"].rules,
+			...ts.configs["stylistic-type-checked"].rules,
+		},
+	},
 
 	// TypeScript files configuration
 	{
@@ -60,9 +76,11 @@ const eslintConfig = [
 				},
 			},
 		},
-		plugins: {
-			"@typescript-eslint": ts,
-		},
+		/*
+		 * No `plugins: { "@typescript-eslint": ts }` here: eslint-config-next
+		 * 16's flat `typescript` config already registers that plugin, and
+		 * flat config refuses to let a second block redefine it.
+		 */
 		rules: {
 			...ts.configs.recommended.rules,
 			"@typescript-eslint/no-unused-vars": [

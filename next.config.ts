@@ -115,17 +115,6 @@ const nextConfig: NextConfig = {
 	 */
 	productionBrowserSourceMaps: false,
 
-	/*
-	 * Lint configuration
-	 */
-	eslint: {
-		/*
-			!! WARNING !!
-			* This allows production builds to successfully complete even if
-			* your project has ESLint errors.
-		*/
-		ignoreDuringBuilds: true,
-	},
 	typescript: {
 		/*
 			!! WARNING !!
@@ -154,9 +143,7 @@ const nextConfig: NextConfig = {
 		serverActions: {
 			bodySizeLimit: FILE_UPLOAD_MAX_SIZE,
 		},
-		// @see: https://nextjs.org/docs/app/api-reference/next-config-js/viewTransition
-		viewTransition: true,
-		webVitalsAttribution: ["CLS", "LCP", "TTFB", "FCP", "FID"],
+		webVitalsAttribution: ["CLS", "LCP", "TTFB", "FCP", "INP"],
 
 		/*
 		 * Next.js 15 Client-side Router Cache Configuration
@@ -215,6 +202,16 @@ const nextConfig: NextConfig = {
 	 * Bundle Size Optimization - Enhanced
 	 * Excludes additional heavy dependencies and dev tools from production bundles
 	 */
+	/*
+	 * next 16 builds with Turbopack by default, which follows
+	 * `@payloadcms/db-postgres` -> `@payloadcms/drizzle` -> `drizzle-kit/api.js`
+	 * -> `esbuild-register` -> `esbuild` and then tries to parse esbuild's native
+	 * platform binary as a module ("Unknown module type" on the bundled README,
+	 * "invalid utf-8 sequence" on `bin/esbuild`). These are Node-only server
+	 * packages, so they are externalised rather than bundled. LAC-6482.
+	 */
+	serverExternalPackages: ["drizzle-kit", "esbuild", "esbuild-register"],
+
 	outputFileTracingExcludes: {
 		"*": [
 			"**/*.test.*",
