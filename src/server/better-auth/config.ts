@@ -109,8 +109,8 @@ export const auth = (() => {
 		},
 
 		advanced: {
-			// Enable CSRF protection
-			csrfProtection: true,
+			// Enable CSRF protection (default in better-auth >= 1.3, kept explicit)
+			disableCSRFCheck: false,
 			// Generate secure session tokens
 			generateId: () => {
 				return (
