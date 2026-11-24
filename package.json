@@ -214,7 +214,7 @@
     "@next/bundle-analyzer": "16.4.3",
     "@next/eslint-plugin-next": "16.4.3",
     "@next/mdx": "16.4.3",
-    "@payloadcms/db-postgres": "3.45.0",
+    "@payloadcms/db-postgres": "3.73.0",
     "@payloadcms/plugin-nested-docs": "3.45.0",
     "@playwright/test": "^1.53.2",
     "@testing-library/jest-dom": "^6.6.3",
